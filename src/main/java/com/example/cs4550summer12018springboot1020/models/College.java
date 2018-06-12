@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -19,8 +22,10 @@ public class College {
   private String name;
   private String operatingStatus;
   private String nonProfitStatus;
-  private List<DegreeType> degreeTypes;
-  private List<String> programTypes;
+  private DegreeType degreeTypes;
+  @OneToMany(mappedBy="college")
+  @JsonIgnore
+  private List<ProgramTypes> programTypes;
   private String religiousAffiliation;
   private String acceptanceRate;
   private Integer schoolRevenue;
@@ -37,6 +42,19 @@ public class College {
   private Integer firstYearCompletion;
   private Integer graduationRate;
   private Integer avgPostEarnings;
+  @OneToMany(mappedBy="college")
+  @JsonIgnore
+  private List<Review> listOfReviews;
+  @OneToMany(mappedBy="college")
+  @JsonIgnore
+  private List<Recommendation> listOfRecommendations;
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable
+  @JsonIgnore
+  private List<CollegeList> collegeLists;
+  @OneToMany(mappedBy="college")
+  @JsonIgnore
+  private List<Question> listOfQuestions;
 
   public int getId() {
     return id;
@@ -70,19 +88,19 @@ public class College {
     this.nonProfitStatus = nonProfitStatus;
   }
 
-  public List<DegreeType> getDegreeTypes() {
+  public DegreeType getDegreeTypes() {
     return degreeTypes;
   }
 
-  public void setDegreeTypes(List<DegreeType> degreeTypes) {
+  public void setDegreeTypes(DegreeType degreeTypes) {
     this.degreeTypes = degreeTypes;
   }
 
-  public List<String> getProgramTypes() {
+  public List<ProgramTypes> getProgramTypes() {
     return programTypes;
   }
 
-  public void setProgramTypes(List<String> programTypes) {
+  public void setProgramTypes(List<ProgramTypes> programTypes) {
     this.programTypes = programTypes;
   }
 
@@ -196,5 +214,37 @@ public class College {
 
   public void setAvgPostEarnings(Integer avgPostEarnings) {
     this.avgPostEarnings = avgPostEarnings;
+  }
+
+  public List<Review> getListOfReviews() {
+    return listOfReviews;
+  }
+
+  public void setListOfReviews(List<Review> listOfReviews) {
+    this.listOfReviews = listOfReviews;
+  }
+
+  public List<Recommendation> getListOfRecommendations() {
+    return listOfRecommendations;
+  }
+
+  public void setListOfRecommendations(List<Recommendation> listOfRecommendations) {
+    this.listOfRecommendations = listOfRecommendations;
+  }
+
+  public List<CollegeList> getCollegeLists() {
+    return collegeLists;
+  }
+
+  public void setCollegeLists(List<CollegeList> collegeLists) {
+    this.collegeLists = collegeLists;
+  }
+
+  public List<Question> getListOfQuestions() {
+    return listOfQuestions;
+  }
+
+  public void setListOfQuestions(List<Question> listOfQuestions) {
+    this.listOfQuestions = listOfQuestions;
   }
 }

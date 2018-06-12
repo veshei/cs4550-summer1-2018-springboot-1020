@@ -17,6 +17,8 @@ public class Recommendation {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String title;
+  @ManyToOne
+  @JsonIgnore
   private College college;
   @ManyToOne
   @JsonIgnore

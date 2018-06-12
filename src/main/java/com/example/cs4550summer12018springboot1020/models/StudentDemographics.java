@@ -20,10 +20,10 @@ public class StudentDemographics {
   private College college;
   @OneToOne(cascade = CascadeType.ALL)
   @JsonIgnore
-  private UndergraduateStatusPop undergradPop;
+  private UndergraduateStatusPop undergraduateStatusPop;
   @OneToOne(cascade = CascadeType.ALL)
   @JsonIgnore
-  private UndergraduateRacePop undergradRacePop;
+  private UndergraduateRacePop undergraduateRacePop;
   @OneToOne(cascade = CascadeType.ALL)
   @JsonIgnore
   private AidByIncome aidByIncome;
@@ -56,20 +56,20 @@ public class StudentDemographics {
     this.college = college;
   }
 
-  public UndergraduateStatusPop getUndergradPop() {
-    return undergradPop;
+  public UndergraduateStatusPop getUndergraduateStatusPop() {
+    return undergraduateStatusPop;
   }
 
-  public void setUndergradPop(UndergraduateStatusPop undergradPop) {
-    this.undergradPop = undergradPop;
+  public void setUndergraduateStatusPop(UndergraduateStatusPop undergraduateStatusPop) {
+    this.undergraduateStatusPop = undergraduateStatusPop;
   }
 
-  public UndergraduateRacePop getUndergradRacePop() {
-    return undergradRacePop;
+  public UndergraduateRacePop getUndergraduateRacePop() {
+    return undergraduateRacePop;
   }
 
-  public void setUndergradRacePop(UndergraduateRacePop undergradRacePop) {
-    this.undergradRacePop = undergradRacePop;
+  public void setUndergraduateRacePop(UndergraduateRacePop undergraduateRacePop) {
+    this.undergraduateRacePop = undergraduateRacePop;
   }
 
   public AidByIncome getAidByIncome() {

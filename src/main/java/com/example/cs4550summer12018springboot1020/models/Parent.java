@@ -21,7 +21,7 @@ public class Parent extends User {
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable
   @JsonIgnore
-  private List<CollegeCounselor> collegeCounselor;
+  private List<CollegeCounselor> collegeCounselors;
 
   public List<Student> getStudents() {
     return students;
@@ -31,11 +31,11 @@ public class Parent extends User {
     this.students = students;
   }
 
-  public List<CollegeCounselor> getCollegeCounselor() {
-    return collegeCounselor;
+  public List<CollegeCounselor> getCollegeCounselors() {
+    return collegeCounselors;
   }
 
-  public void setCollegeCounselor(List<CollegeCounselor> collegeCounselor) {
-    this.collegeCounselor = collegeCounselor;
+  public void setCollegeCounselors(List<CollegeCounselor> collegeCounselors) {
+    this.collegeCounselors = collegeCounselors;
   }
 }

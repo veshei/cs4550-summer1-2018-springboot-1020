@@ -14,6 +14,8 @@ public class Review {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String title;
+  @ManyToOne
+  @JsonIgnore
   private College college;
   @ManyToOne
   @JsonIgnore

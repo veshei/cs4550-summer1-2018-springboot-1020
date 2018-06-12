@@ -9,18 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Question {
+public class ProgramTypes {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  private String title;
-  private String question;
   @ManyToOne
   @JsonIgnore
   private College college;
-  @ManyToOne
-  @JsonIgnore
-  private User user;
+  private String programName;
+  private String programType;
 
   public int getId() {
     return id;
@@ -28,22 +25,6 @@ public class Question {
 
   public void setId(int id) {
     this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getQuestion() {
-    return question;
-  }
-
-  public void setQuestion(String question) {
-    this.question = question;
   }
 
   public College getCollege() {
@@ -54,11 +35,19 @@ public class Question {
     this.college = college;
   }
 
-  public User getUser() {
-    return user;
+  public String getProgramName() {
+    return programName;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setProgramName(String programName) {
+    this.programName = programName;
+  }
+
+  public String getProgramType() {
+    return programType;
+  }
+
+  public void setProgramType(String programType) {
+    this.programType = programType;
   }
 }

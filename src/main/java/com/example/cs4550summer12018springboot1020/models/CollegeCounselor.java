@@ -13,7 +13,7 @@ public class CollegeCounselor extends User {
   @OneToMany(mappedBy="collegeCounselor")
   @JsonIgnore
   private List<Student> students;
-  @ManyToMany(mappedBy = "collegeCounselor")
+  @ManyToMany(mappedBy = "collegeCounselors")
   @JsonIgnore
   private List<Parent> parents;
   @OneToMany(mappedBy="collegeCounselor")
