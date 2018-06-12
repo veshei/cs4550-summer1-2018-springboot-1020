@@ -1,4 +1,8 @@
 package com.example.cs4550summer12018springboot1020.repositories;
 
-public interface ReviewRepository {
+import com.example.cs4550summer12018springboot1020.models.Review;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface ReviewRepository extends CrudRepository<Review, Integer> {
 }

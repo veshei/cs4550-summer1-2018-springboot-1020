@@ -1,4 +1,8 @@
 package com.example.cs4550summer12018springboot1020.repositories;
 
-public interface UndergraduateStatusPopRepository {
+import com.example.cs4550summer12018springboot1020.models.UndergraduateStatusPop;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface UndergraduateStatusPopRepository extends CrudRepository<UndergraduateStatusPop, Integer> {
 }

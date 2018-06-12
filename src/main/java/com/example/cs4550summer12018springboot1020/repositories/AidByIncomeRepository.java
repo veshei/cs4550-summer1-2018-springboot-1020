@@ -1,4 +1,8 @@
 package com.example.cs4550summer12018springboot1020.repositories;
 
-public interface AidByIncomeRepository {
+import com.example.cs4550summer12018springboot1020.models.AidByIncome;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface AidByIncomeRepository extends CrudRepository<AidByIncome, Integer> {
 }

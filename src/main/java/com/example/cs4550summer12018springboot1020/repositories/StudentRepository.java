@@ -1,4 +1,8 @@
 package com.example.cs4550summer12018springboot1020.repositories;
 
-public interface StudentRepository {
+import com.example.cs4550summer12018springboot1020.models.Student;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface StudentRepository extends CrudRepository<Student, Integer> {
 }
