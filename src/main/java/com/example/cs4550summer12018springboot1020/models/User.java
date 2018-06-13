@@ -24,6 +24,7 @@ public class User {
   private String firstName;
   private String lastName;
   private Timestamp dateOfBirth;
+  private Roles role;
   @OneToMany(mappedBy="user")
   @JsonIgnore
   private List<CollegeList> collegeLists;
@@ -80,6 +81,14 @@ public class User {
 
   public void setDateOfBirth(Timestamp dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
+  }
+
+  public Roles getRole() {
+    return role;
+  }
+
+  public void setRole(Roles role) {
+    this.role = role;
   }
 
   public List<CollegeList> getCollegeLists() {

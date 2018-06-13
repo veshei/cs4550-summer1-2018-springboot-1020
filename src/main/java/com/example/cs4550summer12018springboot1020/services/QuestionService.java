@@ -27,12 +27,12 @@ public class QuestionService {
   UserRepository userRepository;
 
   @DeleteMapping("api/question/{qId}")
-  public void deleteCollegeList(@PathVariable("qId") int qId) {
+  public void deleteQuestion(@PathVariable("qId") int qId) {
     questionRepository.deleteById(qId);
   }
 
   @PostMapping("api/user/{userId}/question")
-  public Question createCollegeList(@PathVariable("userId") int userId,
+  public Question createQuestion(@PathVariable("userId") int userId,
                                        @RequestBody Question newQuestion) {
     Optional<User> data = userRepository.findById(userId);
     if (data.isPresent()) {
@@ -44,7 +44,7 @@ public class QuestionService {
   }
 
   @GetMapping("api/user/{userId}/question")
-  public List<Question> findCollegeListForUser(@PathVariable("userId") int userId) {
+  public List<Question> findQuestionForUser(@PathVariable("userId") int userId) {
     Optional<User> data = userRepository.findById(userId);
     if (data.isPresent()) {
       User user = data.get();
@@ -54,7 +54,7 @@ public class QuestionService {
   }
 
   @GetMapping("api/question/{qId}")
-  public Question findCollegeListById(@PathVariable("qId") int qId) {
+  public Question findQuestionById(@PathVariable("qId") int qId) {
     Optional<Question> data = questionRepository.findById(qId);
     if (data.isPresent()) {
       return data.get();
