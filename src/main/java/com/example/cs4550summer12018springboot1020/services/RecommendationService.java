@@ -38,7 +38,7 @@ public class RecommendationService {
   @Autowired
   StudentRepository studentRepository;
 
-  @DeleteMapping("api/question/{rId}")
+  @DeleteMapping("api/recommendation/{rId}")
   public void deleteRecommendation(@PathVariable("rId") int rId) {
     recommendationRepository.deleteById(rId);
   }
