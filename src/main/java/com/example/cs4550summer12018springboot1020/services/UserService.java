@@ -20,7 +20,8 @@ import javax.servlet.http.HttpSession;
 
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:3000", "https://cs4550-summer1-2018-react-1020.herokuapp.com/"},
+        maxAge = 3600)
 public class UserService {
   @Autowired
   UserRepository userRepository;
