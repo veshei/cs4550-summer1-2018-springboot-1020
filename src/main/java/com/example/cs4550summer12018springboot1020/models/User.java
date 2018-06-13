@@ -26,7 +26,7 @@ public class User {
   private Timestamp dateOfBirth;
   @OneToMany(mappedBy="user")
   @JsonIgnore
-  private List<CollegeList> colleges;
+  private List<CollegeList> collegeLists;
   @OneToMany(mappedBy="user")
   @JsonIgnore
   private List<Review> reviews;
@@ -82,12 +82,12 @@ public class User {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public List<CollegeList> getColleges() {
-    return colleges;
+  public List<CollegeList> getCollegeLists() {
+    return collegeLists;
   }
 
-  public void setColleges(List<CollegeList> colleges) {
-    this.colleges = colleges;
+  public void setCollegeLists(List<CollegeList> collegeLists) {
+    this.collegeLists = collegeLists;
   }
 
   public List<Review> getReviews() {
