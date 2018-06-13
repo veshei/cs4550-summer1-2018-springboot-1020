@@ -52,8 +52,8 @@ public class UserService {
 
   @PostMapping("/api/register")
   public User register(@RequestBody User user, HttpSession session) {
-    List<User> users = this.findAllUsers();
-    if (!users.contains(user)) {
+    List<User> users = (List<User>) this.userRepository.findUserByUsername(user.getUsername());
+    if (users.size() == 0) {
       session.setAttribute("currentUser", user);
       userRepository.save(user);
     }
