@@ -14,9 +14,7 @@ public class Review {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String title;
-  @ManyToOne
-  @JsonIgnore
-  private College college;
+  private Integer collegeId;
   @ManyToOne
   @JsonIgnore
   private User user;
@@ -37,12 +35,12 @@ public class Review {
     this.title = title;
   }
 
-  public College getCollege() {
-    return college;
+  public Integer getCollegeId() {
+    return collegeId;
   }
 
-  public void setCollege(College college) {
-    this.college = college;
+  public void setCollegeId(Integer collegeId) {
+    this.collegeId = collegeId;
   }
 
   public User getUser() {

@@ -33,6 +33,78 @@ public class User {
   @OneToMany(mappedBy="user")
   @JsonIgnore
   private List<Question> questions;
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public Timestamp getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  public void setDateOfBirth(Timestamp dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public List<CollegeList> getColleges() {
+    return colleges;
+  }
+
+  public void setColleges(List<CollegeList> colleges) {
+    this.colleges = colleges;
+  }
+
+  public List<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
+
+  public List<Question> getQuestions() {
+    return questions;
+  }
+
+  public void setQuestions(List<Question> questions) {
+    this.questions = questions;
+  }
 }
 
 

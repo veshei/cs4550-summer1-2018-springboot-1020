@@ -17,9 +17,7 @@ public class Recommendation {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String title;
-  @ManyToOne
-  @JsonIgnore
-  private College college;
+  private Integer collegeId;
   @ManyToOne
   @JsonIgnore
   private Student student;
@@ -30,9 +28,7 @@ public class Recommendation {
   @JsonIgnore
   private CollegeCounselor collegeCounselor;
   private String description;
-  @OneToMany(mappedBy="parent")
-  @JsonIgnore
-  private List<Recommendation> writtenRecommendations;
+
 
   public int getId() {
     return id;
@@ -50,12 +46,12 @@ public class Recommendation {
     this.title = title;
   }
 
-  public College getCollege() {
-    return college;
+  public Integer getCollegeId() {
+    return collegeId;
   }
 
-  public void setCollege(College college) {
-    this.college = college;
+  public void setCollegeId(Integer collegeId) {
+    this.collegeId = collegeId;
   }
 
   public Student getStudent() {
@@ -90,11 +86,4 @@ public class Recommendation {
     this.description = description;
   }
 
-  public List<Recommendation> getWrittenRecommendations() {
-    return writtenRecommendations;
-  }
-
-  public void setWrittenRecommendations(List<Recommendation> writtenRecommendations) {
-    this.writtenRecommendations = writtenRecommendations;
-  }
 }

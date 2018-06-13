@@ -15,9 +15,7 @@ public class Question {
   private int id;
   private String title;
   private String question;
-  @ManyToOne
-  @JsonIgnore
-  private College college;
+  private Integer collegeId;
   @ManyToOne
   @JsonIgnore
   private User user;
@@ -46,12 +44,12 @@ public class Question {
     this.question = question;
   }
 
-  public College getCollege() {
-    return college;
+  public Integer getCollegeId() {
+    return collegeId;
   }
 
-  public void setCollege(College college) {
-    this.college = college;
+  public void setCollegeId(Integer collegeId) {
+    this.collegeId = collegeId;
   }
 
   public User getUser() {

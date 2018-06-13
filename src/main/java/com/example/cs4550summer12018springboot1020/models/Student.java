@@ -29,12 +29,12 @@ public class Student extends User {
     this.schoolYear = schoolYear;
   }
 
-  public Parent getParent1() {
+  public Parent getParent() {
     return parent;
   }
 
-  public void setParent1(Parent parent1) {
-    this.parent = parent1;
+  public void setParent(Parent parent) {
+    this.parent = parent;
   }
 
   public CollegeCounselor getCollegeCounselor() {
@@ -43,5 +43,13 @@ public class Student extends User {
 
   public void setCollegeCounselor(CollegeCounselor collegeCounselor) {
     this.collegeCounselor = collegeCounselor;
+  }
+
+  public List<Recommendation> getRecommendations() {
+    return recommendations;
+  }
+
+  public void setRecommendations(List<Recommendation> recommendations) {
+    this.recommendations = recommendations;
   }
 }

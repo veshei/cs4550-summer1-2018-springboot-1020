@@ -2,6 +2,7 @@ package com.example.cs4550summer12018springboot1020.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -20,9 +21,7 @@ public class CollegeList {
   @ManyToOne
   @JsonIgnore
   private User user;
-  @ManyToMany(mappedBy = "collegeLists")
-  @JsonIgnore
-  private List<College> listOfColleges;
+  private ArrayList<Integer> listOfColleges;
 
   public int getId() {
     return id;
@@ -48,11 +47,11 @@ public class CollegeList {
     this.user = user;
   }
 
-  public List<College> getListOfColleges() {
+  public ArrayList<Integer> getListOfColleges() {
     return listOfColleges;
   }
 
-  public void setListOfColleges(List<College> listOfColleges) {
+  public void setListOfColleges(ArrayList<Integer> listOfColleges) {
     this.listOfColleges = listOfColleges;
   }
 }

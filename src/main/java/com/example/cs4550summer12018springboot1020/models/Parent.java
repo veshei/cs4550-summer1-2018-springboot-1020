@@ -22,6 +22,9 @@ public class Parent extends User {
   @JoinTable
   @JsonIgnore
   private List<CollegeCounselor> collegeCounselors;
+  @OneToMany(mappedBy="parent")
+  @JsonIgnore
+  private List<Recommendation> writtenRecommendations;
 
   public List<Student> getStudents() {
     return students;
@@ -37,5 +40,13 @@ public class Parent extends User {
 
   public void setCollegeCounselors(List<CollegeCounselor> collegeCounselors) {
     this.collegeCounselors = collegeCounselors;
+  }
+
+  public List<Recommendation> getWrittenRecommendations() {
+    return writtenRecommendations;
+  }
+
+  public void setWrittenRecommendations(List<Recommendation> writtenRecommendations) {
+    this.writtenRecommendations = writtenRecommendations;
   }
 }
