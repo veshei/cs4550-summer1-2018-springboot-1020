@@ -52,8 +52,14 @@ public class UserService {
 
   @PostMapping("/api/register")
   public User register(@RequestBody User user, HttpSession session) {
-    session.setAttribute("currentUser", user);
-    userRepository.save(user);
+    List<User> users = this.findAllUsers();
+    if (!users.contains(user)) {
+      session.setAttribute("currentUser", user);
+      userRepository.save(user);
+    }
+    else {
+      throw new IllegalStateException();
+    }
     return user;
   }
 
