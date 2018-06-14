@@ -26,7 +26,6 @@ public class User {
   private Timestamp dateOfBirth;
   private Roles role;
   @OneToMany(mappedBy="user")
-  @JsonIgnore
   private List<CollegeList> collegeLists;
   @OneToMany(mappedBy="user")
   @JsonIgnore
@@ -113,6 +112,49 @@ public class User {
 
   public void setQuestions(List<Question> questions) {
     this.questions = questions;
+  }
+
+  /**
+   * Updates this user's fields with the given user's fields. Does not override with any fields that are null in the
+   * new user object.
+   * @param updatedUser the user object that contains the updated information
+   */
+  public void updateUser(User updatedUser) {
+    if (updatedUser.username != null) {
+      this.username = updatedUser.username;
+    }
+
+    if (updatedUser.password != null) {
+      this.password = updatedUser.password;
+    }
+
+    if (updatedUser.firstName != null) {
+      this.firstName = updatedUser.firstName;
+    }
+
+    if (updatedUser.lastName != null) {
+      this.lastName = updatedUser.lastName;
+    }
+
+    if (updatedUser.dateOfBirth != null) {
+      this.dateOfBirth = updatedUser.dateOfBirth;
+    }
+
+    if (updatedUser.role != null) {
+      this.role = updatedUser.role;
+    }
+
+    if (updatedUser.collegeLists != null) {
+      this.collegeLists = updatedUser.collegeLists;
+    }
+
+    if (updatedUser.reviews != null) {
+      this.reviews = updatedUser.reviews;
+    }
+
+    if (updatedUser.questions != null) {
+      this.questions = updatedUser.questions;
+    }
   }
 }
 

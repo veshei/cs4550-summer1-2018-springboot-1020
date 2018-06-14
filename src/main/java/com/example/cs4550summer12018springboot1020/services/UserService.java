@@ -28,10 +28,10 @@ public class UserService {
 
   @PostMapping("/api/login")
   public User login(@RequestBody User credentials, HttpSession session) {
-    List<User> users = this.findAllUsers();
-    for (User user: users) {
-      if (user.getUsername().equals(credentials.getUsername()) &&
-          user.getPassword().equals(credentials.getPassword())) {
+    List<User> userList = (List<User>) this.userRepository.findUserByUsername(credentials.getUsername());
+    if (!userList.isEmpty()) {
+      User user = userList.get(0);
+      if (user.getPassword().equals(credentials.getPassword())) {
         session.setAttribute("currentUser", user);
         return user;
       }
@@ -48,6 +48,18 @@ public class UserService {
   public User profile(HttpSession session) {
     User currentUser = (User) session.getAttribute("currentUser");
     return currentUser;
+  }
+
+  @PutMapping("/api/profile")
+  public User updateProfile(HttpSession session, @RequestBody User updatedUser) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    if (currentUser != null) {
+      currentUser.updateUser(updatedUser);
+      this.userRepository.save(currentUser);
+      session.setAttribute("currentUser", currentUser);
+      return updatedUser;
+    }
+    return null;
   }
 
   @PostMapping("/api/register")
