@@ -17,7 +17,6 @@ public class Review {
   private String body;
   private Integer collegeId;
   @ManyToOne
-  @JsonIgnore
   private User user;
 
   public int getId() {

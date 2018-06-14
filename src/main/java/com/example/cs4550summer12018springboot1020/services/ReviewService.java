@@ -49,6 +49,7 @@ public class ReviewService {
     if (currentUser != null) {
       review.setUser(currentUser);
       this.reviewRepository.save(review);
+      return review;
     }
     return null;
   }
