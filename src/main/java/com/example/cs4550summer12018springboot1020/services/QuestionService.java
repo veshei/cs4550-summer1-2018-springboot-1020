@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class QuestionService {
@@ -31,26 +33,18 @@ public class QuestionService {
     questionRepository.deleteById(qId);
   }
 
-  @PostMapping("api/user/{userId}/question")
-  public Question createQuestion(@PathVariable("userId") int userId,
-                                       @RequestBody Question newQuestion) {
-    Optional<User> data = userRepository.findById(userId);
-    if (data.isPresent()) {
-      User user = data.get();
-      newQuestion.setUser(user);
-      return questionRepository.save(newQuestion);
-    }
-    return null;
+  @PostMapping("api/user/question")
+  public Question createQuestion(@RequestBody Question newQuestion,
+                                 HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    newQuestion.setUser(currentUser);
+    return questionRepository.save(newQuestion);
   }
 
-  @GetMapping("api/user/{userId}/question")
-  public List<Question> findQuestionForUser(@PathVariable("userId") int userId) {
-    Optional<User> data = userRepository.findById(userId);
-    if (data.isPresent()) {
-      User user = data.get();
-      return user.getQuestions();
-    }
-    return null;
+  @GetMapping("api/user/question")
+  public List<Question> findQuestionForUser(HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    return currentUser.getQuestions();
   }
 
   @GetMapping("api/question/{qId}")
