@@ -57,6 +57,9 @@ public class RecommendationService {
       newRecommendation.setParent((Parent) currentUser);
       return recommendationRepository.save(newRecommendation);
     }
+    else {
+      throw new IllegalArgumentException();
+    }
     return null;
   }
 
@@ -70,6 +73,9 @@ public class RecommendationService {
         Student student = data.get();
         return student.getRecommendations();
       }
+    }
+    else {
+      throw new IllegalArgumentException();
     }
     return null;
   }
