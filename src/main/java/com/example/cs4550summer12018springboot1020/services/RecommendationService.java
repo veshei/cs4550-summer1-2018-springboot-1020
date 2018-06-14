@@ -60,7 +60,6 @@ public class RecommendationService {
     else {
       throw new IllegalArgumentException();
     }
-    return null;
   }
 
   @GetMapping("api/student/recommendations")
