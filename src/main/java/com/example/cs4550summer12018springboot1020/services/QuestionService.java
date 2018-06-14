@@ -60,4 +60,9 @@ public class QuestionService {
   public List<Question> findAllQuestions() {
     return (List<Question>) questionRepository.findAll();
   }
+
+  @GetMapping("/api/question/college/{collegeId}")
+  public List<Question> findQuestionsForCollege(@PathVariable("collegeId") int collegeId) {
+    return this.questionRepository.findQuestionsForCollege(collegeId);
+  }
 }
