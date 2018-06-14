@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RecommendationService {
@@ -43,36 +45,31 @@ public class RecommendationService {
     recommendationRepository.deleteById(rId);
   }
 
-  @PostMapping("api/collegeCounselor/{ccId}/recommendation")
-  public Recommendation createCollegeCounselorRecommendation(@PathVariable("ccId") int ccId,
+  @PostMapping("api/user/recommendation")
+  public Recommendation createRecommendation(HttpSession session,
                                     @RequestBody Recommendation newRecommendation) {
-    Optional<CollegeCounselor> data = collegeCounselorRepository.findById(ccId);
-    if (data.isPresent()) {
-      CollegeCounselor collegeCounselor = data.get();
-      newRecommendation.setCollegeCounselor(collegeCounselor);
+    User currentUser = (User) session.getAttribute("currentUser");
+    if (currentUser.getRole().equals("College Counselor")) {
+      newRecommendation.setCollegeCounselor((CollegeCounselor) currentUser);
+      return recommendationRepository.save(newRecommendation);
+    }
+    else if (currentUser.getRole().equals("Parent")) {
+      newRecommendation.setParent((Parent) currentUser);
       return recommendationRepository.save(newRecommendation);
     }
     return null;
   }
 
-  @PostMapping("api/parent/{parentId}/recommendation")
-  public Recommendation createParentRecommendation(@PathVariable("parentId") int parentId,
-                                                   @RequestBody Recommendation newRecommendation) {
-    Optional<Parent> data = parentRepository.findById(parentId);
-    if (data.isPresent()) {
-      Parent parent = data.get();
-      newRecommendation.setParent(parent);
-      return recommendationRepository.save(newRecommendation);
-    }
-    return null;
-  }
-
-  @GetMapping("api/student/{studentId}/recommendation")
-  public List<Recommendation> findRecommendationsForStudent(@PathVariable("studentId") int studentId) {
-    Optional<Student> data = studentRepository.findById(studentId);
-    if (data.isPresent()) {
-      Student student = data.get();
-      return student.getRecommendations();
+  @GetMapping("api/student/recommendations")
+  public List<Recommendation> findRecommendationsForStudent(HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    if (currentUser.getRole().equals("Student")) {
+      Integer studentId = currentUser.getId();
+      Optional<Student> data = studentRepository.findById(studentId);
+      if (data.isPresent()) {
+        Student student = data.get();
+        return student.getRecommendations();
+      }
     }
     return null;
   }

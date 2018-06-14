@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ReviewService {
@@ -62,26 +64,18 @@ public class ReviewService {
     reviewRepository.deleteById(reviewId);
   }
 
-  @PostMapping("api/user/{userId}/review")
-  public Review createReview(@PathVariable("userId") int userId,
+  @PostMapping("api/user/review")
+  public Review createReview(HttpSession session,
                                  @RequestBody Review newReview) {
-    Optional<User> data = userRepository.findById(userId);
-    if (data.isPresent()) {
-      User user = data.get();
-      newReview.setUser(user);
-      return reviewRepository.save(newReview);
-    }
-    return null;
+    User currentUser = (User) session.getAttribute("currentUser");
+    newReview.setUser(currentUser);
+    return reviewRepository.save(newReview);
   }
 
-  @GetMapping("api/user/{userId}/review")
-  public List<Review> findReviewForUser(@PathVariable("userId") int userId) {
-    Optional<User> data = userRepository.findById(userId);
-    if (data.isPresent()) {
-      User user = data.get();
-      return user.getReviews();
-    }
-    return null;
+  @GetMapping("api/user/review")
+  public List<Review> findReviewForUser(HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    return currentUser.getReviews();
   }
 
   @GetMapping("api/review/{reviewId}")

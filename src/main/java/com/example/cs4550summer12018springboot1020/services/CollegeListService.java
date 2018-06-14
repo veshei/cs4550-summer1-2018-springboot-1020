@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CollegeListService {
@@ -30,26 +32,18 @@ public class CollegeListService {
     collegeListRepository.deleteById(cId);
   }
 
-  @PostMapping("api/user/{userId}/collegeList")
-  public CollegeList createCollegeList(@PathVariable("userId") int userId,
-                                      @RequestBody CollegeList newCollegeList) {
-    Optional<User> data = userRepository.findById(userId);
-    if (data.isPresent()) {
-      User user = data.get();
-      newCollegeList.setUser(user);
-      return collegeListRepository.save(newCollegeList);
-    }
-    return null;
+  @PostMapping("api/user/collegeList")
+  public CollegeList createCollegeList(@RequestBody CollegeList newCollegeList,
+                                       HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    newCollegeList.setUser(currentUser);
+    return collegeListRepository.save(newCollegeList);
   }
 
-  @GetMapping("api/user/{userId}/collegeList")
-  public List<CollegeList> findCollegeListForUser(@PathVariable("userId") int userId) {
-    Optional<User> data = userRepository.findById(userId);
-    if (data.isPresent()) {
-      User user = data.get();
-      return user.getCollegeLists();
-    }
-    return null;
+  @GetMapping("api/user/collegeList")
+  public List<CollegeList> findCollegeListForUser(HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    return currentUser.getCollegeLists();
   }
 
   @GetMapping("api/collegeList/{cId}")
