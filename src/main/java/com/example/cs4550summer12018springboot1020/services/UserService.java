@@ -83,7 +83,7 @@ public class UserService {
       return users.get(0);
     }
     else {
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.setStatus(HttpServletResponse.SC_NO_CONTENT);
       return null;
     }
   }
