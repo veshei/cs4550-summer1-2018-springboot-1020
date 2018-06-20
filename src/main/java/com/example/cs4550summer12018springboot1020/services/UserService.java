@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -76,13 +77,14 @@ public class UserService {
   }
 
   @GetMapping("/api/username/{username}")
-  public User findUserByUsername(@PathVariable("username") String username) {
+  public User findUserByUsername(@PathVariable("username") String username, HttpServletResponse response ) {
     List<User> users = (List<User>) userRepository.findUserByUsername(username);
     if (users.size() > 0) {
       return users.get(0);
     }
     else {
-      throw new RuntimeException();
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      return "{\"Error\":\"User with that username not found\"}";
     }
   }
 
