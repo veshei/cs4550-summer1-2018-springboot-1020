@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -24,7 +25,7 @@ public class User {
   private String firstName;
   private String lastName;
   private Timestamp dateOfBirth;
-  private Roles role;
+  private Roles roles;
   @OneToMany(mappedBy="user")
   private List<CollegeList> collegeLists;
   @OneToMany(mappedBy="user")
@@ -82,12 +83,12 @@ public class User {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public Roles getRole() {
-    return role;
+  public Roles getRoles() {
+    return roles;
   }
 
-  public void setRole(Roles role) {
-    this.role = role;
+  public void setRoles(Roles roles) {
+    this.roles = roles;
   }
 
   public List<CollegeList> getCollegeLists() {
@@ -140,8 +141,8 @@ public class User {
       this.dateOfBirth = updatedUser.dateOfBirth;
     }
 
-    if (updatedUser.role != null) {
-      this.role = updatedUser.role;
+    if (updatedUser.roles != null) {
+      this.roles = updatedUser.roles;
     }
 
     if (updatedUser.collegeLists != null) {
