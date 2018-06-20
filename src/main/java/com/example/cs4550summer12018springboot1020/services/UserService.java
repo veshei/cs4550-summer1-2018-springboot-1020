@@ -84,7 +84,7 @@ public class UserService {
     }
     else {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-      return "{\"Error\":\"User with that username not found\"}";
+      return null;
     }
   }
 
