@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,31 @@ public class CollegeListService {
   @Autowired
   UserRepository userRepository;
 
+  @PutMapping("api/collegeList/{cId}")
+  public CollegeList updateCollegeList(@PathVariable("cId") int cId,
+                                       @RequestBody CollegeList newCollegeList) {
+    Optional<CollegeList> data = collegeListRepository.findById(cId);
+    if(data.isPresent()) {
+      CollegeList collegeList = data.get();
+      if (collegeList.getName() != null) {
+        collegeList.setName(newCollegeList.getName());
+      }
+      if (newCollegeList.getUser() != null) {
+        collegeList.setUser(newCollegeList.getUser());
+      }
+      if (newCollegeList.getListOfColleges() != null) {
+        for (int i = 0; i < newCollegeList.getListOfColleges().size(); i++) {
+          if (!collegeList.getListOfColleges().contains(newCollegeList.getListOfColleges().get(i))) {
+            collegeList.getListOfColleges().add(newCollegeList.getListOfColleges().get(i));
+          }
+        }
+      }
+      collegeListRepository.save(collegeList);
+      return collegeList;
+    }
+    return null;
+  }
+
   @DeleteMapping("api/collegeList/{cId}")
   public void deleteCollegeList(@PathVariable("cId") int cId) {
     collegeListRepository.deleteById(cId);
@@ -36,14 +62,21 @@ public class CollegeListService {
   public CollegeList createCollegeList(@RequestBody CollegeList newCollegeList,
                                        HttpSession session) {
     User currentUser = (User) session.getAttribute("currentUser");
-    newCollegeList.setUser(currentUser);
-    return collegeListRepository.save(newCollegeList);
+    if (currentUser != null) {
+      System.out.println(currentUser);
+      newCollegeList.setUser(currentUser);
+      return collegeListRepository.save(newCollegeList);
+    }
+    return null;
   }
 
   @GetMapping("api/user/collegeList")
   public List<CollegeList> findCollegeListForUser(HttpSession session) {
     User currentUser = (User) session.getAttribute("currentUser");
-    return currentUser.getCollegeLists();
+    if (currentUser != null) {
+      return currentUser.getCollegeLists();
+    }
+    return null;
   }
 
   @GetMapping("api/collegeList/{cId}")
