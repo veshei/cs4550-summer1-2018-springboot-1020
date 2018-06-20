@@ -75,7 +75,7 @@ public class UserService {
     return user;
   }
 
-  @GetMapping("/api/user/{username}")
+  @GetMapping("/api/username/{username}")
   public User findUserByUsername(@PathVariable("username") String username) {
     List<User> users = (List<User>) userRepository.findUserByUsername(username);
     if (users.size() > 0) {
