@@ -28,7 +28,7 @@ public class UserService {
   UserRepository userRepository;
 
   @PostMapping("/api/login")
-  public User login(@RequestBody User credentials, HttpSession session) {
+  public User login(@RequestBody User credentials, HttpSession session,HttpServletResponse response) {
     List<User> userList = (List<User>) this.userRepository.findUserByUsername(credentials.getUsername());
     if (!userList.isEmpty()) {
       User user = userList.get(0);
@@ -37,6 +37,7 @@ public class UserService {
         return user;
       }
     }
+    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     return null;
   }
 
