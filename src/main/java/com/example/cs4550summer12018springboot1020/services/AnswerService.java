@@ -2,11 +2,13 @@ package com.example.cs4550summer12018springboot1020.services;
 
 import com.example.cs4550summer12018springboot1020.models.Answer;
 import com.example.cs4550summer12018springboot1020.models.Question;
+import com.example.cs4550summer12018springboot1020.models.User;
 import com.example.cs4550summer12018springboot1020.repositories.AnswerRepository;
 import com.example.cs4550summer12018springboot1020.repositories.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,12 +56,19 @@ public class AnswerService {
    * @return the new answer on successful save, null on failure
    */
   @PostMapping("/api/question/{questionId}/answer")
-  public Answer createNewAnswer(@PathVariable("questionId") int questionId, @RequestBody Answer answer) {
+  public Answer createNewAnswer(@PathVariable("questionId") int questionId, @RequestBody Answer answer,
+                                HttpSession session) {
     Optional<Question> questionOptional = this.questionRepository.findById(questionId);
     if (questionOptional.isPresent()) {
       Question question = questionOptional.get();
       answer.setQuestion(question);
-      return this.answerRepository.save(answer);
+
+      // Set the author as the currently logged in user
+      User user = (User) session.getAttribute("currentUser");
+      if (user != null) {
+        answer.setUser(user);
+        return this.answerRepository.save(answer);
+      }
     }
     return null;
   }

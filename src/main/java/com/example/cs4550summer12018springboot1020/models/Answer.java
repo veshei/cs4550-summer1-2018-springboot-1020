@@ -53,6 +53,13 @@ public class Answer {
     this.question = question;
   }
 
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
   /**
    * Updates the fields of this answer with the non-null fields of the given answer except for id.
    * @param updatedAnswer the new answer that contains the updated information.
