@@ -44,10 +44,14 @@ public class CollegeListService {
           if (collegeList.getListOfColleges() != null) {
             if (!collegeList.getListOfColleges().contains(newCollegeList.getListOfColleges().get(i))) {
               collegeList.getListOfColleges().add(newCollegeList.getListOfColleges().get(i));
+              int index = currentUser.getCollegeLists().indexOf(collegeList);
+              currentUser.getCollegeLists().get(index).setListOfColleges(collegeList.getListOfColleges());
             }
           }
           else {
             collegeList.setListOfColleges(newCollegeList.getListOfColleges());
+            int index = currentUser.getCollegeLists().indexOf(collegeList);
+            currentUser.getCollegeLists().get(index).setListOfColleges(collegeList.getListOfColleges());
           }
         }
       }
@@ -68,6 +72,7 @@ public class CollegeListService {
     User currentUser = (User) session.getAttribute("currentUser");
     if (currentUser != null) {
       newCollegeList.setUser(currentUser);
+      currentUser.getCollegeLists().add(newCollegeList);
       return collegeListRepository.save(newCollegeList);
     }
     return null;

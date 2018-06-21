@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,5 +54,22 @@ public class CollegeList {
 
   public void setListOfColleges(ArrayList<Integer> listOfColleges) {
     this.listOfColleges = listOfColleges;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof CollegeList)) {
+      return false;
+    }
+    CollegeList collegeList = (CollegeList) obj;
+    return (collegeList.getId() == ((CollegeList) obj).getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name);
   }
 }
