@@ -2,11 +2,8 @@ package com.example.cs4550summer12018springboot1020.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -18,6 +15,8 @@ public class Question {
   private Integer collegeId;
   @ManyToOne
   private User user;
+  @OneToMany(mappedBy="question")
+  private List<Answer> answers;
 
   public int getId() {
     return id;
@@ -57,5 +56,13 @@ public class Question {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public List<Answer> getAnswers() {
+    return answers;
+  }
+
+  public void setAnswers(List<Answer> answers) {
+    this.answers = answers;
   }
 }
