@@ -33,6 +33,9 @@ public class User {
   @OneToMany(mappedBy="user")
   @JsonIgnore
   private List<Question> questions;
+  @OneToMany(mappedBy="user")
+  @JsonIgnore
+  private List<Answer> answers;
 
   public int getId() {
     return id;
@@ -114,6 +117,14 @@ public class User {
     this.questions = questions;
   }
 
+  public List<Answer> getAnswers() {
+    return answers;
+  }
+
+  public void setAnswers(List<Answer> answers) {
+    this.answers = answers;
+  }
+
   /**
    * Updates this user's fields with the given user's fields. Does not override with any fields that are null in the
    * new user object.
@@ -154,6 +165,9 @@ public class User {
 
     if (updatedUser.questions != null) {
       this.questions = updatedUser.questions;
+    }
+    if (updatedUser.answers != null) {
+      this.answers = updatedUser.answers;
     }
   }
 }
