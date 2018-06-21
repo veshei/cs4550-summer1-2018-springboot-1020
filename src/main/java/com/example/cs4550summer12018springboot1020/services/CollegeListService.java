@@ -30,20 +30,24 @@ public class CollegeListService {
 
   @PutMapping("api/collegeList/{cId}")
   public CollegeList updateCollegeList(@PathVariable("cId") int cId,
-                                       @RequestBody CollegeList newCollegeList) {
+                                       @RequestBody CollegeList newCollegeList,
+                                       HttpSession session) {
     Optional<CollegeList> data = collegeListRepository.findById(cId);
+    User currentUser = (User) session.getAttribute("currentUser");
     if(data.isPresent()) {
       CollegeList collegeList = data.get();
       if (collegeList.getName() != null) {
         collegeList.setName(newCollegeList.getName());
       }
-      if (newCollegeList.getUser() != null) {
-        collegeList.setUser(newCollegeList.getUser());
-      }
       if (newCollegeList.getListOfColleges() != null) {
         for (int i = 0; i < newCollegeList.getListOfColleges().size(); i++) {
-          if (!collegeList.getListOfColleges().contains(newCollegeList.getListOfColleges().get(i))) {
-            collegeList.getListOfColleges().add(newCollegeList.getListOfColleges().get(i));
+          if (collegeList.getListOfColleges() != null) {
+            if (!collegeList.getListOfColleges().contains(newCollegeList.getListOfColleges().get(i))) {
+              collegeList.getListOfColleges().add(newCollegeList.getListOfColleges().get(i));
+            }
+          }
+          else {
+            collegeList.setListOfColleges(newCollegeList.getListOfColleges());
           }
         }
       }
@@ -63,7 +67,6 @@ public class CollegeListService {
                                        HttpSession session) {
     User currentUser = (User) session.getAttribute("currentUser");
     if (currentUser != null) {
-      System.out.println(currentUser);
       newCollegeList.setUser(currentUser);
       return collegeListRepository.save(newCollegeList);
     }
