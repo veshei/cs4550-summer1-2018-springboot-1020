@@ -17,7 +17,6 @@ public class Question {
   private String question;
   private Integer collegeId;
   @ManyToOne
-  @JsonIgnore
   private User user;
 
   public int getId() {
