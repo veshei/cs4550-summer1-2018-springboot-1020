@@ -57,19 +57,16 @@ public class CollegeList {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
-    }
-    if (!(obj instanceof CollegeList)) {
-      return false;
-    }
-    CollegeList collegeList = (CollegeList) obj;
-    return (collegeList.getId() == ((CollegeList) obj).getId());
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CollegeList that = (CollegeList) o;
+    return id == that.id;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+
+    return Objects.hash(id);
   }
 }

@@ -62,7 +62,14 @@ public class CollegeListService {
   }
 
   @DeleteMapping("api/collegeList/{cId}")
-  public void deleteCollegeList(@PathVariable("cId") int cId) {
+  public void deleteCollegeList(@PathVariable("cId") int cId,
+                                HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    Optional<CollegeList> data = collegeListRepository.findById(cId);
+    if (data.isPresent()) {
+      CollegeList collegeList = data.get();
+      currentUser.getCollegeLists().remove(collegeList);
+    }
     collegeListRepository.deleteById(cId);
   }
 
