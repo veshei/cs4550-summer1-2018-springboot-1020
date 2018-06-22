@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,35 +29,54 @@ public class CollegeListService {
   @Autowired
   UserRepository userRepository;
 
-  @PutMapping("api/collegeList/{cId}")
-  public CollegeList updateCollegeList(@PathVariable("cId") int cId,
+  @PutMapping("api/addCollege/{cId}")
+  public CollegeList addCollege(@PathVariable("cId") int cId,
                                        @RequestBody CollegeList newCollegeList,
                                        HttpSession session) {
     Optional<CollegeList> data = collegeListRepository.findById(cId);
     User currentUser = (User) session.getAttribute("currentUser");
     if(data.isPresent()) {
       CollegeList collegeList = data.get();
-      if (collegeList.getName() != null) {
-        collegeList.setName(newCollegeList.getName());
-      }
-      if (newCollegeList.getListOfColleges() != null) {
+      ArrayList<Integer> updatedColleges =  newCollegeList.getListOfColleges();
+      ArrayList<Integer> oldColleges =  collegeList.getListOfColleges();
+      if (updatedColleges != null) {
         for (int i = 0; i < newCollegeList.getListOfColleges().size(); i++) {
-          if (collegeList.getListOfColleges() != null) {
-            if (!collegeList.getListOfColleges().contains(newCollegeList.getListOfColleges().get(i))) {
-              collegeList.getListOfColleges().add(newCollegeList.getListOfColleges().get(i));
+          if (oldColleges != null) {
+            if (!oldColleges.contains(updatedColleges.get(i))) {
+              oldColleges.add(updatedColleges.get(i));
               int index = currentUser.getCollegeLists().indexOf(collegeList);
-              currentUser.getCollegeLists().get(index).setListOfColleges(collegeList.getListOfColleges());
+              currentUser.getCollegeLists().get(index).setListOfColleges(oldColleges);
             }
           }
           else {
-            collegeList.setListOfColleges(newCollegeList.getListOfColleges());
+            collegeList.setListOfColleges(updatedColleges);
             int index = currentUser.getCollegeLists().indexOf(collegeList);
-            currentUser.getCollegeLists().get(index).setListOfColleges(collegeList.getListOfColleges());
+            currentUser.getCollegeLists().get(index).setListOfColleges(updatedColleges);
           }
         }
       }
-      collegeListRepository.save(collegeList);
-      return collegeList;
+      return collegeListRepository.save(collegeList);
+//      return collegeList;
+    }
+    return null;
+  }
+
+  @PutMapping("api/deleteCollege/{cId}")
+  public CollegeList deleteCollege(@PathVariable("cId") int cId,
+                                @RequestBody CollegeList newCollegeList,
+                                HttpSession session) {
+    Optional<CollegeList> data = collegeListRepository.findById(cId);
+    User currentUser = (User) session.getAttribute("currentUser");
+    if(data.isPresent()) {
+      CollegeList collegeList = data.get();
+      ArrayList<Integer> updatedColleges =  newCollegeList.getListOfColleges();
+      if (updatedColleges != null) {
+        collegeList.setListOfColleges(updatedColleges);
+        int index = currentUser.getCollegeLists().indexOf(collegeList);
+        currentUser.getCollegeLists().get(index).setListOfColleges(updatedColleges);
+        }
+      return collegeListRepository.save(collegeList);
+//      return collegeList;
     }
     return null;
   }
