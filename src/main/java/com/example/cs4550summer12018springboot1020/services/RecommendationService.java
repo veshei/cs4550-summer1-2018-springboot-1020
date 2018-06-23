@@ -49,7 +49,7 @@ public class RecommendationService {
   public Recommendation createRecommendation(HttpSession session,
                                     @RequestBody Recommendation newRecommendation) {
     User currentUser = (User) session.getAttribute("currentUser");
-    System.out.println(currentUser.getRole())
+    System.out.println(currentUser.getRole());
     if (currentUser.getRole().equals("COLLEGE_COUNSELOR")) {
       newRecommendation.setCollegeCounselor((CollegeCounselor) currentUser);
       return recommendationRepository.save(newRecommendation);
