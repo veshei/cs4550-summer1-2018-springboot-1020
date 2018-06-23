@@ -104,18 +104,7 @@ public class UserService {
     Optional<User> data = userRepository.findById(userId);
     if(data.isPresent()) {
       User user = data.get();
-      if (newUser.getUsername() != null) {
-        user.setUsername(newUser.getUsername());
-      }
-      if (newUser.getPassword() != null) {
-        user.setPassword(newUser.getPassword());
-      }
-      if (newUser.getFirstName() != null) {
-        user.setFirstName(newUser.getFirstName());
-      }
-      if (newUser.getLastName() != null) {
-        user.setLastName(newUser.getLastName());
-      }
+      user.updateUser(newUser);
       userRepository.save(user);
       return user;
     }
@@ -134,5 +123,10 @@ public class UserService {
   @GetMapping("/api/user")
   public List<User> findAllUsers() {
     return (List<User>) userRepository.findAll();
+  }
+
+  @GetMapping("/api/user/{username}/similar")
+  public List<User> findUsersLikeUsername(@PathVariable("username") String username) {
+    return this.userRepository.findUsersLikeUsername(username);
   }
 }
