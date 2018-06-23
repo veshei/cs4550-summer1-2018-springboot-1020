@@ -135,4 +135,9 @@ public class UserService {
   public List<User> findAllUsers() {
     return (List<User>) userRepository.findAll();
   }
+
+  @GetMapping("/api/user/{username}/similar")
+  public List<User> findUsersLikeUsername(@PathVariable("username") String username) {
+    return this.userRepository.findUsersLikeUsername(username);
+  }
 }
