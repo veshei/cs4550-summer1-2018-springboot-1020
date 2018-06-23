@@ -15,7 +15,7 @@ public class Question {
   private Integer collegeId;
   @ManyToOne
   private User user;
-  @OneToMany(mappedBy="question")
+  @OneToMany(mappedBy="question", cascade=CascadeType.REMOVE)
   private List<Answer> answers;
 
   public int getId() {

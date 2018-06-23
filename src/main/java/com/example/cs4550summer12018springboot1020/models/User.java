@@ -5,13 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -25,15 +19,15 @@ public class User {
   private String lastName;
   private Timestamp dateOfBirth;
   private Roles role;
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", cascade= CascadeType.REMOVE)
   private List<CollegeList> collegeLists;
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
   @JsonIgnore
   private List<Review> reviews;
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
   @JsonIgnore
   private List<Question> questions;
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
   @JsonIgnore
   private List<Answer> answers;
 
