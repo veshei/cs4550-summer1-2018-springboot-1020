@@ -5,14 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -25,15 +20,18 @@ public class User {
   private String firstName;
   private String lastName;
   private Timestamp dateOfBirth;
-  private Roles roles;
-  @OneToMany(mappedBy="user")
+  private Roles role;
+  @OneToMany(mappedBy="user", cascade= CascadeType.REMOVE)
   private List<CollegeList> collegeLists;
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
   @JsonIgnore
   private List<Review> reviews;
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
   @JsonIgnore
   private List<Question> questions;
+  @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
+  @JsonIgnore
+  private List<Answer> answers;
 
   public int getId() {
     return id;
@@ -83,12 +81,12 @@ public class User {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public Roles getRoles() {
-    return roles;
+  public Roles getRole() {
+    return role;
   }
 
-  public void setRoles(Roles roles) {
-    this.roles = roles;
+  public void setRole(Roles roles) {
+    this.role = roles;
   }
 
   public List<CollegeList> getCollegeLists() {
@@ -113,6 +111,14 @@ public class User {
 
   public void setQuestions(List<Question> questions) {
     this.questions = questions;
+  }
+
+  public List<Answer> getAnswers() {
+    return answers;
+  }
+
+  public void setAnswers(List<Answer> answers) {
+    this.answers = answers;
   }
 
   /**
@@ -141,8 +147,8 @@ public class User {
       this.dateOfBirth = updatedUser.dateOfBirth;
     }
 
-    if (updatedUser.roles != null) {
-      this.roles = updatedUser.roles;
+    if (updatedUser.role != null) {
+      this.role = updatedUser.role;
     }
 
     if (updatedUser.collegeLists != null) {
@@ -155,6 +161,9 @@ public class User {
 
     if (updatedUser.questions != null) {
       this.questions = updatedUser.questions;
+    }
+    if (updatedUser.answers != null) {
+      this.answers = updatedUser.answers;
     }
   }
 }

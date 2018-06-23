@@ -49,11 +49,12 @@ public class RecommendationService {
   public Recommendation createRecommendation(HttpSession session,
                                     @RequestBody Recommendation newRecommendation) {
     User currentUser = (User) session.getAttribute("currentUser");
-    if (currentUser.getRole().equals("College Counselor")) {
+    System.out.println(currentUser.getRole());
+    if (currentUser.getRole().equals("COLLEGE_COUNSELOR")) {
       newRecommendation.setCollegeCounselor((CollegeCounselor) currentUser);
       return recommendationRepository.save(newRecommendation);
     }
-    else if (currentUser.getRole().equals("Parent")) {
+    else if (currentUser.getRole().equals("PARENT")) {
       newRecommendation.setParent((Parent) currentUser);
       return recommendationRepository.save(newRecommendation);
     }

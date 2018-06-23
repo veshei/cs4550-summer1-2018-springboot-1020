@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -27,7 +28,7 @@ public class UserService {
   UserRepository userRepository;
 
   @PostMapping("/api/login")
-  public User login(@RequestBody User credentials, HttpSession session) {
+  public User login(@RequestBody User credentials, HttpSession session, HttpServletResponse response) {
     List<User> userList = (List<User>) this.userRepository.findUserByUsername(credentials.getUsername());
     if (!userList.isEmpty()) {
       User user = userList.get(0);
@@ -36,6 +37,7 @@ public class UserService {
         return user;
       }
     }
+    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     return null;
   }
 
@@ -75,14 +77,15 @@ public class UserService {
     return user;
   }
 
-  @GetMapping("/api/user/{username}")
-  public User findUserByUsername(@PathVariable("username") String username) {
+  @GetMapping("/api/username/{username}")
+  public User findUserByUsername(@PathVariable("username") String username, HttpServletResponse response ) {
     List<User> users = (List<User>) userRepository.findUserByUsername(username);
     if (users.size() > 0) {
       return users.get(0);
     }
     else {
-      throw new RuntimeException();
+      response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+      return null;
     }
   }
 
@@ -101,18 +104,7 @@ public class UserService {
     Optional<User> data = userRepository.findById(userId);
     if(data.isPresent()) {
       User user = data.get();
-      if (newUser.getUsername() != null) {
-        user.setUsername(newUser.getUsername());
-      }
-      if (newUser.getPassword() != null) {
-        user.setPassword(newUser.getPassword());
-      }
-      if (newUser.getFirstName() != null) {
-        user.setFirstName(newUser.getFirstName());
-      }
-      if (newUser.getLastName() != null) {
-        user.setLastName(newUser.getLastName());
-      }
+      user.updateUser(newUser);
       userRepository.save(user);
       return user;
     }
@@ -131,5 +123,10 @@ public class UserService {
   @GetMapping("/api/user")
   public List<User> findAllUsers() {
     return (List<User>) userRepository.findAll();
+  }
+
+  @GetMapping("/api/user/{username}/similar")
+  public List<User> findUsersLikeUsername(@PathVariable("username") String username) {
+    return this.userRepository.findUsersLikeUsername(username);
   }
 }
