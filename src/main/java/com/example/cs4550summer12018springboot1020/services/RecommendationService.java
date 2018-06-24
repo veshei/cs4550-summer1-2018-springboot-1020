@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,11 +66,17 @@ public class RecommendationService {
       Optional<Student> data = studentRepository.findById(studentId);
       if (data.isPresent()) {
         Student student = data.get();
-        return recommendationRepository.findByStudentId(student.getId()).get();
+        Optional<List<Recommendation>> isThereRec = recommendationRepository.findByStudentId(student.getId());
+        if(isThereRec.isPresent()) {
+          return isThereRec.get();
+        }
+        else{
+          return new ArrayList<Recommendation>();
+        }
       }
     }
     else {
-      throw new IllegalArgumentException();
+      return null;
     }
     return null;
   }
