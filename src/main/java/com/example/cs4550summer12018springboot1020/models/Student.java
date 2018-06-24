@@ -17,6 +17,7 @@ public class Student extends User {
   @ManyToOne
   @JsonIgnore
   private CollegeCounselor collegeCounselor;
+
   @OneToMany(mappedBy="student")
   @JsonIgnore
   private List<Recommendation> recommendations;

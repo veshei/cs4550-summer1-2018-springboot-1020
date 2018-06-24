@@ -49,7 +49,6 @@ public class RecommendationService {
 
     if (currentUser.getRole().equals(Roles.COLLEGE_COUNSELOR) || currentUser.getRole().equals(Roles.PARENT)) {
       newRecommendation.setRecommender(currentUser);
-      System.out.println(newRecommendation.getStudent());
       return recommendationRepository.save(newRecommendation);
     }
     else{
@@ -66,7 +65,7 @@ public class RecommendationService {
       Optional<Student> data = studentRepository.findById(studentId);
       if (data.isPresent()) {
         Student student = data.get();
-        return student.getRecommendations();
+        return recommendationRepository.findByStudentId(student.getId()).get();
       }
     }
     else {
@@ -84,7 +83,7 @@ public class RecommendationService {
     return null;
   }
 
-  @GetMapping("api/recommendation")
+  @GetMapping("api/recommendations")
   public List<Recommendation> findAllRecommendations() {
     return (List<Recommendation>) recommendationRepository.findAll();
   }

@@ -22,7 +22,6 @@ public class Recommendation {
   private Student student;
 
   @ManyToOne
-  @JsonIgnore
   private User recommender;
   private String description;
 
