@@ -99,7 +99,14 @@ public class CollegeListService {
     User currentUser = (User) session.getAttribute("currentUser");
     if (currentUser != null) {
       newCollegeList.setUser(currentUser);
-      currentUser.getCollegeLists().add(newCollegeList);
+      if (currentUser.getCollegeLists() != null) {
+        currentUser.getCollegeLists().add(newCollegeList);
+      }
+      else {
+        List<CollegeList> list = new ArrayList<>();
+        list.add(newCollegeList);
+        currentUser.setCollegeLists(list);
+      }
       return collegeListRepository.save(newCollegeList);
     }
     return null;
