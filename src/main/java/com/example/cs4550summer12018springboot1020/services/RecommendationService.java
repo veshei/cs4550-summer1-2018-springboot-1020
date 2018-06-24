@@ -1,11 +1,6 @@
 package com.example.cs4550summer12018springboot1020.services;
 
-import com.example.cs4550summer12018springboot1020.models.CollegeCounselor;
-import com.example.cs4550summer12018springboot1020.models.Parent;
-import com.example.cs4550summer12018springboot1020.models.Question;
-import com.example.cs4550summer12018springboot1020.models.Recommendation;
-import com.example.cs4550summer12018springboot1020.models.Student;
-import com.example.cs4550summer12018springboot1020.models.User;
+import com.example.cs4550summer12018springboot1020.models.*;
 import com.example.cs4550summer12018springboot1020.repositories.CollegeCounselorRepository;
 import com.example.cs4550summer12018springboot1020.repositories.ParentRepository;
 import com.example.cs4550summer12018springboot1020.repositories.RecommendationRepository;
@@ -24,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -46,27 +43,25 @@ public class RecommendationService {
   }
 
   @PostMapping("api/user/recommendation")
-  public Recommendation createRecommendation(HttpSession session,
-                                    @RequestBody Recommendation newRecommendation) {
-    User currentUser = (User) session.getAttribute("currentUser");
-    System.out.println(currentUser.getRole());
-    if (currentUser.getRole().equals("COLLEGE_COUNSELOR")) {
-      newRecommendation.setCollegeCounselor((CollegeCounselor) currentUser);
+  public Recommendation createRecommendation(HttpSession session, HttpServletResponse response,
+                                             @RequestBody Recommendation newRecommendation) {
+    User currentUser =  (User) session.getAttribute("currentUser");
+
+    if (currentUser.getRole().equals(Roles.COLLEGE_COUNSELOR) || currentUser.getRole().equals(Roles.PARENT)) {
+      newRecommendation.setRecommender(currentUser);
+      System.out.println(newRecommendation.getStudent());
       return recommendationRepository.save(newRecommendation);
     }
-    else if (currentUser.getRole().equals("PARENT")) {
-      newRecommendation.setParent((Parent) currentUser);
-      return recommendationRepository.save(newRecommendation);
-    }
-    else {
-      throw new IllegalArgumentException();
+    else{
+      response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+      return null;
     }
   }
 
   @GetMapping("api/student/recommendations")
   public List<Recommendation> findRecommendationsForStudent(HttpSession session) {
     User currentUser = (User) session.getAttribute("currentUser");
-    if (currentUser.getRole().equals("Student")) {
+    if (currentUser.getRole().equals(Roles.STUDENT)) {
       Integer studentId = currentUser.getId();
       Optional<Student> data = studentRepository.findById(studentId);
       if (data.isPresent()) {

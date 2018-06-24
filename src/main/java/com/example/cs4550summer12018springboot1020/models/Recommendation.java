@@ -19,14 +19,11 @@ public class Recommendation {
   private String title;
   private Integer collegeId;
   @ManyToOne
-  @JsonIgnore
   private Student student;
+
   @ManyToOne
   @JsonIgnore
-  private Parent parent;
-  @ManyToOne
-  @JsonIgnore
-  private CollegeCounselor collegeCounselor;
+  private User recommender;
   private String description;
 
 
@@ -62,20 +59,12 @@ public class Recommendation {
     this.student = student;
   }
 
-  public Parent getParent() {
-    return parent;
+  public User getRecommender() {
+    return recommender;
   }
 
-  public void setParent(Parent parent) {
-    this.parent = parent;
-  }
-
-  public CollegeCounselor getCollegeCounselor() {
-    return collegeCounselor;
-  }
-
-  public void setCollegeCounselor(CollegeCounselor collegeCounselor) {
-    this.collegeCounselor = collegeCounselor;
+  public void setRecommender(User recommender) {
+    this.recommender = recommender;
   }
 
   public String getDescription() {

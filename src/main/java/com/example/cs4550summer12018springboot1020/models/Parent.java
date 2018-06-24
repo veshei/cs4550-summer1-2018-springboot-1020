@@ -22,7 +22,7 @@ public class Parent extends User {
   @JoinTable
   @JsonIgnore
   private List<CollegeCounselor> collegeCounselors;
-  @OneToMany(mappedBy="parent")
+  @OneToMany(mappedBy="recommender")
   @JsonIgnore
   private List<Recommendation> writtenRecommendations;
 

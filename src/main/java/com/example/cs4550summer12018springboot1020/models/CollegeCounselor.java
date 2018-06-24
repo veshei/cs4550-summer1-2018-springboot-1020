@@ -16,7 +16,7 @@ public class CollegeCounselor extends User {
   @ManyToMany(mappedBy = "collegeCounselors")
   @JsonIgnore
   private List<Parent> parents;
-  @OneToMany(mappedBy="collegeCounselor")
+  @OneToMany(mappedBy="recommender")
   @JsonIgnore
   private List<Recommendation> recommendations;
 
