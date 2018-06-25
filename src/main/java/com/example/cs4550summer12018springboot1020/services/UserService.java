@@ -149,17 +149,22 @@ public class UserService {
   @PostMapping("/api/user")
   public User createUser(@RequestBody User user) {
     if(user.getRole() == Roles.STUDENT) {
-      Student student = (Student) user;
+      Student student = new Student();
+      student.updateUser(user);
       student.setRecommendations(new ArrayList<Recommendation>());
 
-      return studentRepository.save((Student) user);
+      return studentRepository.save(student);
 
     }
     else if(user.getRole() == Roles.PARENT) {
-      return parentRepository.save((Parent) user);
+      Parent parent = new Parent();
+      parent.updateUser(user);
+      return parentRepository.save(parent);
     }
     else if(user.getRole() == Roles.COLLEGE_COUNSELOR){
-      return collegeCounselorRepository.save((CollegeCounselor) user);
+      CollegeCounselor counselor = new CollegeCounselor();
+      counselor.updateUser(user);
+      return collegeCounselorRepository.save(counselor);
     }
     return null;
   }
