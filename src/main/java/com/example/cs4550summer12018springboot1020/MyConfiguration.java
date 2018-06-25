@@ -17,7 +17,7 @@ public class MyConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                 .allowCredentials(true).maxAge(3600)
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("Content-Type")
                 .allowedOrigins("http://localhost:3000", "https://cs4550-summer1-2018-react-1020.herokuapp.com");
             }
