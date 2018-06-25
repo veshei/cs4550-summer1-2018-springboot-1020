@@ -16,7 +16,6 @@ import javax.persistence.Table;
 @Entity
 public class Parent extends User {
   @OneToMany(mappedBy="parent")
-  @JsonIgnore
   private List<Student> students;
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable

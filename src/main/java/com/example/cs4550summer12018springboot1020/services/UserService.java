@@ -1,10 +1,7 @@
 package com.example.cs4550summer12018springboot1020.services;
 
 import com.example.cs4550summer12018springboot1020.models.*;
-import com.example.cs4550summer12018springboot1020.repositories.UserRepository;
-import com.example.cs4550summer12018springboot1020.repositories.StudentRepository;
-import com.example.cs4550summer12018springboot1020.repositories.ParentRepository;
-import com.example.cs4550summer12018springboot1020.repositories.CollegeCounselorRepository;
+import com.example.cs4550summer12018springboot1020.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +35,9 @@ public class UserService {
 
   @Autowired
   CollegeCounselorRepository collegeCounselorRepository;
+
+  @Autowired
+  AdminUserRepository adminUserRepository;
 
   @PostMapping("/api/login")
   public User login(@RequestBody User credentials, HttpSession session, HttpServletResponse response) {
@@ -115,6 +116,17 @@ public class UserService {
     }
   }
 
+  @PostMapping("/api/register/admin")
+  public User registerAdmin(@RequestBody AdminUser user, HttpSession session) {
+    List<User> users = (List<User>) this.userRepository.findUserByUsername(user.getUsername());
+    if (users.size() == 0) {
+      session.setAttribute("currentUser", user);
+      return adminUserRepository.save(user);
+    } else {
+      return null;
+    }
+  }
+
 
 
   @GetMapping("/api/username/{username}")
@@ -181,5 +193,167 @@ public class UserService {
   @GetMapping("/api/user/{username}/similar")
   public List<User> findUsersLikeUsername(@PathVariable("username") String username) {
     return this.userRepository.findUsersLikeUsername(username);
+  }
+
+  // Returns the parent of the given student id
+  @GetMapping("/api/student/{userId}/parent")
+  public Parent findParentForStudent(@PathVariable("userId") int userId) {
+    Optional<Parent> parentOptional = this.studentRepository.findParentForStudent(userId);
+    if (parentOptional.isPresent()) {
+      return parentOptional.get();
+    }
+    return null;
+  }
+
+  // Returns the counselor of the given student id
+  @GetMapping("/api/student/{userId}/counselor")
+  public CollegeCounselor findCounselorForStudent(@PathVariable("userId") int userId) {
+    Optional<CollegeCounselor> counselorOptional = this.studentRepository.findCounselorForStudent(userId);
+    if (counselorOptional.isPresent()) {
+      return counselorOptional.get();
+    }
+    return null;
+  }
+
+  // Returns the list of counselors associated with the parent of the given id
+  @GetMapping("/api/parent/{userId}/counselor")
+  public List<CollegeCounselor> findCounselorsForParent(@PathVariable("userId") int userId) {
+    return this.parentRepository.findCounselorsForParent(userId);
+  }
+
+  // Creates a relation between the given student and parent, if possible
+  @PostMapping("/api/student/{studentId}/parent/{parentId}")
+  public void createStudentParentRelation(@PathVariable("studentId") int studentId,
+                                                  @PathVariable("parentId") int parentId,
+                                                  HttpServletResponse response) throws IOException {
+    Optional<Student> optionalStudent = this.studentRepository.findById(studentId);
+    Optional<Parent> optionalParent = this.parentRepository.findById(parentId);
+    if (optionalStudent.isPresent() && optionalParent.isPresent()) {
+      Student student = optionalStudent.get();
+      Parent parent = optionalParent.get();
+      // Check if the student currently doesn't have a parent
+      if (student.getParent() == null) {
+        student.setParent(parent);
+        this.studentRepository.save(student);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Student already has a parent");
+      }
+    } else {
+      response.sendError(400, "Could not find student and/or parent");
+    }
+  }
+
+  // Creates a relation between the given student and counselor, if possible
+  @PostMapping("/api/student/{studentId}/counselor/{counselorId}")
+  public void createStudentCounselorRelation(@PathVariable("studentId") int studentId,
+                                             @PathVariable("counselorId") int counselorId,
+                                             HttpServletResponse response) throws IOException {
+    Optional<Student> optionalStudent = this.studentRepository.findById(studentId);
+    Optional<CollegeCounselor> optionalCounselor = this.collegeCounselorRepository.findById(counselorId);
+
+    if (optionalStudent.isPresent() && optionalCounselor.isPresent()) {
+      Student student = optionalStudent.get();
+      CollegeCounselor counselor = optionalCounselor.get();
+      if (student.getCollegeCounselor() == null) {
+        student.setCollegeCounselor(counselor);
+        this.studentRepository.save(student);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Student already has a counselor");
+      }
+    } else {
+      response.sendError(400, "Could not find resulting users");
+    }
+  }
+
+  // Creates a relation between the given parent and counselor, if possible
+  @PostMapping("/api/parent/{parentId}/counselor/{counselorId}")
+  public void createParentCounselorRelation(@PathVariable("parentId") int parentId,
+                                            @PathVariable("counselorId") int counselorId,
+                                            HttpServletResponse response) throws IOException {
+    Optional<Parent> optionalParent = this.parentRepository.findById(parentId);
+    Optional<CollegeCounselor> optionalCounselor = this.collegeCounselorRepository.findById(counselorId);
+    if (optionalParent.isPresent() && optionalCounselor.isPresent()) {
+      Parent parent = optionalParent.get();
+      CollegeCounselor counselor = optionalCounselor.get();
+      // Make sure the parent doesn't currently have the counselor in the list before adding
+      if (!parent.getCollegeCounselors().contains(counselor)) {
+        List<CollegeCounselor> currentCounselors = parent.getCollegeCounselors();
+        currentCounselors.add(counselor);
+        parent.setCollegeCounselors(currentCounselors);
+        this.parentRepository.save(parent);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Parent/counselor relation already exists");
+      }
+    } else {
+      response.sendError(400, "Could not find parent or counselor");
+    }
+  }
+
+  @DeleteMapping("/api/student/{studentId}/parent/{parentId}")
+  public void deleteStudentParentRelation(@PathVariable("studentId") int studentId,
+                                          @PathVariable("parentId") int parentId,
+                                          HttpServletResponse response) throws IOException {
+    Optional<Student> optionalStudent = this.studentRepository.findById(studentId);
+    Optional<Parent> optionalParent = this.parentRepository.findById(parentId);
+
+    if (optionalStudent.isPresent() && optionalParent.isPresent()) {
+      Student student = optionalStudent.get();
+      Parent parent = optionalParent.get();
+
+      if (student.getParent().getId() == parent.getId()) {
+        student.setParent(null);
+        this.studentRepository.save(student);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Student and parent ids do not match");
+      }
+    } else {
+      response.sendError(400, "Student and/or parent not found");
+    }
+  }
+
+  @DeleteMapping("/api/student/{studentId}/counselor/{counselorId}")
+  public void deleteStudentCounselorRelation(@PathVariable("studentId") int studentId,
+                                             @PathVariable("counselorId") int counselorId,
+                                             HttpServletResponse response) throws IOException {
+    Optional<Student> optionalStudent = this.studentRepository.findById(studentId);
+    Optional<CollegeCounselor> optionalCounselor = this.collegeCounselorRepository.findById(counselorId);
+    if (optionalStudent.isPresent() && optionalCounselor.isPresent()) {
+      Student student = optionalStudent.get();
+      CollegeCounselor counselor = optionalCounselor.get();
+
+      if (student.getCollegeCounselor().getId() == counselor.getId()) {
+        student.setCollegeCounselor(null);
+        this.studentRepository.save(student);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Student and counselor ids do not match");
+      }
+    } else {
+      response.sendError(400, "Student and/or parent not found");
+    }
+  }
+
+  @DeleteMapping("/api/parent/{parentId}/counselor/{counselorId}")
+  public void deleteParentCounselorRelation(@PathVariable("parentId") int parentId,
+                                            @PathVariable("counselorId") int counselorId,
+                                            HttpServletResponse response) throws IOException {
+    Optional<Parent> optionalParent = this.parentRepository.findById(parentId);
+    Optional<CollegeCounselor> optionalCounselor = this.collegeCounselorRepository.findById(counselorId);
+
+    if (optionalParent.isPresent() && optionalCounselor.isPresent()) {
+      Parent parent = optionalParent.get();
+      CollegeCounselor counselor = optionalCounselor.get();
+      // Remove the counselor from the parent's counselor list
+      List<CollegeCounselor> collegeCounselorList = parent.getCollegeCounselors();
+      collegeCounselorList.remove(counselor);
+      this.parentRepository.save(parent);
+      response.setStatus(200);
+    } else {
+      response.sendError(400, "Could not find parent and/or counselor");
+    }
   }
 }
