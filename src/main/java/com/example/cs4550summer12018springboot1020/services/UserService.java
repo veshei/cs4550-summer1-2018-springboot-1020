@@ -291,4 +291,69 @@ public class UserService {
       response.sendError(400, "Could not find parent or counselor");
     }
   }
+
+  @DeleteMapping("/api/student/{studentId}/parent/{parentId}")
+  public void deleteStudentParentRelation(@PathVariable("studentId") int studentId,
+                                          @PathVariable("parentId") int parentId,
+                                          HttpServletResponse response) throws IOException {
+    Optional<Student> optionalStudent = this.studentRepository.findById(studentId);
+    Optional<Parent> optionalParent = this.parentRepository.findById(parentId);
+
+    if (optionalStudent.isPresent() && optionalParent.isPresent()) {
+      Student student = optionalStudent.get();
+      Parent parent = optionalParent.get();
+
+      if (student.getParent().getId() == parent.getId()) {
+        student.setParent(null);
+        this.studentRepository.save(student);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Student and parent ids do not match");
+      }
+    } else {
+      response.sendError(400, "Student and/or parent not found");
+    }
+  }
+
+  @DeleteMapping("/api/student/{studentId}/counselor/{counselorId}")
+  public void deleteStudentCounselorRelation(@PathVariable("studentId") int studentId,
+                                             @PathVariable("counselorId") int counselorId,
+                                             HttpServletResponse response) throws IOException {
+    Optional<Student> optionalStudent = this.studentRepository.findById(studentId);
+    Optional<CollegeCounselor> optionalCounselor = this.collegeCounselorRepository.findById(counselorId);
+    if (optionalStudent.isPresent() && optionalCounselor.isPresent()) {
+      Student student = optionalStudent.get();
+      CollegeCounselor counselor = optionalCounselor.get();
+
+      if (student.getCollegeCounselor().getId() == counselor.getId()) {
+        student.setCollegeCounselor(null);
+        this.studentRepository.save(student);
+        response.setStatus(200);
+      } else {
+        response.sendError(400, "Student and counselor ids do not match");
+      }
+    } else {
+      response.sendError(400, "Student and/or parent not found");
+    }
+  }
+
+  @DeleteMapping("/api/parent/{parentId}/counselor/{counselorId}")
+  public void deleteParentCounselorRelation(@PathVariable("parentId") int parentId,
+                                            @PathVariable("counselorId") int counselorId,
+                                            HttpServletResponse response) throws IOException {
+    Optional<Parent> optionalParent = this.parentRepository.findById(parentId);
+    Optional<CollegeCounselor> optionalCounselor = this.collegeCounselorRepository.findById(counselorId);
+
+    if (optionalParent.isPresent() && optionalCounselor.isPresent()) {
+      Parent parent = optionalParent.get();
+      CollegeCounselor counselor = optionalCounselor.get();
+      // Remove the counselor from the parent's counselor list
+      List<CollegeCounselor> collegeCounselorList = parent.getCollegeCounselors();
+      collegeCounselorList.remove(counselor);
+      this.parentRepository.save(parent);
+      response.setStatus(200);
+    } else {
+      response.sendError(400, "Could not find parent and/or counselor");
+    }
+  }
 }
